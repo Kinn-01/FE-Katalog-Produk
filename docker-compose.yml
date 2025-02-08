@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  landingapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8081:80"
+    restart: always
+    
+networks:
+  linkyi-bridge:
+    external: true

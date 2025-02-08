@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.gradient-button {
+    background-color: linear-gradient(to right, #5ECEFF 0%, #2C79EB 100%);
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .content-section {
+    flex: 1;
+  }
+  .fixed-top {
+    /* background-color: rgba(255, 255, 255, 0.8); Atur transparansi navbar */
+    position: fixed; /* Mengubah posisi menjadi fixed */
+    top: 0; /* Menempatkan navbar di atas viewport */
+    left: 0; /* Menempatkan navbar di sisi kiri viewport */
+    width: 100%; /* Membentangkan navbar ke seluruh lebar viewport */
+    z-index: 100; /* Menempatkan navbar di atas elemen lain */
+  }
+      
