@@ -18,7 +18,7 @@ export const useDataStore = defineStore("dataStore", {
       thumbnail: "",
       category: "",
       links: []
-    }, // Ensure this is in state
+    },
   }),
   actions: {
     async fetchData(slug) {
@@ -35,7 +35,6 @@ export const useDataStore = defineStore("dataStore", {
         this.storeName = store.name;
         this.storeLogo = store.logo;
         this.storeDescription = store.description;
-        // this.storeLinks = links;
         this.storeLinks = links.filter(link => link.type === "link");
         this.themeName = theme.name;
         this.themePath = theme.path;
@@ -57,13 +56,25 @@ export const useDataStore = defineStore("dataStore", {
         if (!slug) {
           throw new Error("Slug is required");
         }
-        const response = await axios.get(
-          `https://api.linkyi.shop/api/store/${slug}/products`
-        );
-        const products = response.data.data.products.data;
-        // console.log('di fetch products')
-        // console.log(products)
-        this.cakeItems = products.map((product) => ({
+        let currentPage = 1;
+        let allProducts = [];
+        let hasMorePages = true;
+
+        while (hasMorePages) {
+          const response = await axios.get(
+            `https://api.linkyi.shop/api/store/${slug}/products?page=${currentPage}`
+          );
+          const products = response.data.data.products.data;
+          if (products && products.length > 0) {
+            allProducts = allProducts.concat(products);
+            currentPage++;
+            hasMorePages = currentPage <= response.data.data.products.last_page;
+          } else {
+            hasMorePages = false;
+          }
+        }
+
+        this.cakeItems = allProducts.map((product) => ({
           id: product.id,
           title: product.title,
           price: product.price,
@@ -98,8 +109,7 @@ export const useDataStore = defineStore("dataStore", {
           price: productDetail.products.price,
           thumbnail: productDetail.products.thumbnail,
           category: productDetail.category.name,
-          // description: productDetail.products.description || "No description available",
-          links: productDetail.links// Provide a default value if links are undefined
+          links: productDetail.links
         };
       } catch (error) {
         console.error("API Fetch Error:", error);
