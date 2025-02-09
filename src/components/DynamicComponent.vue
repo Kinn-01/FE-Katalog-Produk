@@ -38,31 +38,29 @@ export default {
 
         const productId = dataStore.cakeItems.length > 0 ? dataStore.cakeItems[0].id : null;
         if (productId) {
-        await dataStore.fetchProductDetail(currentSlug, productId);
-        selectedCakeItem.value = dataStore.selectedCakeItem;
-        const productDetail = dataStore.selectedCakeItem; // Assign productDetail here
-        // console.log(productDetail); // Debugging line to check the structure
-      } else {
-        console.error("No products found to fetch details for.");
-      }
+          await dataStore.fetchProductDetail(currentSlug, productId);
+          selectedCakeItem.value = dataStore.selectedCakeItem;
+        } else {
+          console.error("No products found to fetch details for.");
+        }
 
-      const themePath = dataStore.themePath;
-      const routeName = route.name;
-      currentComponent.value = markRaw(await getComponentByTheme(themePath, routeName));
-    } catch (error) {
-      console.error("Error loading component:", error);
-      currentComponent.value = null;
-    }
-  };
+        const themePath = dataStore.themePath;
+        const routeName = route.name;
+        currentComponent.value = markRaw(await getComponentByTheme(themePath, routeName));
+      } catch (error) {
+        console.error("Error loading component:", error);
+        currentComponent.value = null;
+      }
+    };
 
     const themeMap = {
       "blue-store": {
-        Produk: () => import(`../components/theme/blue-store/produk.vue`),
-        Linkyi: () => import(`../components/theme/blue-store/Linkyi.vue`),
+        Produk: () => import("../components/theme/blue-store/produk.vue"),
+        Linkyi: () => import("../components/theme/blue-store/Linkyi.vue"),
       },
       "orange-store": {
-        Produk: () => import(`../components/theme/orange-store/orangeproduk.vue`),
-        Linkyi: () => import(`../components/theme/orange-store/Linkyi.vue`),
+        Produk: () => import("../components/theme/orange-store/orangeproduk.vue"),
+        Linkyi: () => import("../components/theme/orange-store/Linkyi.vue"),
       },
     };
 
@@ -81,8 +79,14 @@ export default {
       loadComponent();
     });
 
-    watch(() => props.slug, (newSlug, oldSlug) => {
+    watch(() => route.params.slug, (newSlug, oldSlug) => {
       if (newSlug !== oldSlug) {
+        loadComponent();
+      }
+    });
+
+    watch(() => route.name, (newName, oldName) => {
+      if (newName !== oldName) {
         loadComponent();
       }
     });
