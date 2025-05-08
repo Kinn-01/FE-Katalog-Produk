@@ -1,39 +1,35 @@
 <template>
-  <div class="bg-slate-100">
-    <div class="mx-auto min-h-full max-w-md">
-      <div class="min-h-screen bg-white pb-16">
-        <!-- navbar -->
-        <div class="bg-pink-100 mx-0 my-0 py-4 sticky top-0 z-50">
-          <div class="flex items-center justify-center">
-            <div
-              class="relative flex items-center bg-white rounded-full shadow-md mx-4 max-w-2xl w-full p-2"
-            >
-              <img
-                src="../../../assets/seaarch.png"
-                alt="Search Icon"
-                class="h-6 w-6 ml-3"
-              />
-              <input
-                class="placeholder:italic placeholder:text-slate-300 block bg-transparent w-full border-none rounded-full pl-3 pr-3 focus:outline-none focus:ring-0 sm:text-sm"
-                placeholder="Temukan Produk yang Anda Inginkan"
-                type="text"
-                v-model="searchQuery"
-                @input="filterItems"
-              />
-              <img
-                src="../../../assets/linkyi.svg"
-                alt="Bag Icon"
-                class="h-6 w-6 mr-3"
-              />
-            </div>
+  <div class="bg-slate-100 h-screen overflow-hidden">
+    <div class="mx-auto max-w-md h-full flex flex-col">
+
+      <!-- Navbar Pencarian -->
+      <div class="bg-blue-100 py-4 sticky top-0 z-50">
+        <div class="flex items-center justify-center">
+          <div
+            class="relative flex items-center bg-white rounded-full shadow-md mx-4 max-w-2xl w-full p-2"
+          >
+            <img
+              src="../../../assets/seaarch.png"
+              alt="Search Icon"
+              class="h-6 w-6 ml-3"
+            />
+            <input
+              class="placeholder:italic placeholder:text-slate-300 block bg-transparent w-full border-none rounded-full pl-3 pr-3 focus:outline-none focus:ring-0 sm:text-sm"
+              placeholder="Temukan Produk yang Anda Inginkan"
+              type="text"
+              v-model="searchQuery"
+              @input="filterItems"
+            />
           </div>
         </div>
-        <!-- end navbar -->
+      </div>
 
-        <!-- content section -->
-        <div class="bg-pink-100 p-6 mt-0">
+      <!-- Info Toko dan Kategori (Tetap di atas) -->
+      <div class="bg-white">
+        <!-- Informasi Toko -->
+        <div class="bg-blue-100 p-6">
           <div class="flex items-center mb-4">
-            <img :src="storeLogo" alt="Store Logo" class="h-20 w-30 mr-4" />
+            <img :src="storeLogo" alt="Store Logo" class="h-20 w-30 mr-4 rounded-full" />
             <div>
               <h2 class="text-xl font-bold text-left">{{ storeName }}</h2>
               <p class="text-sm text-justify text-gray-500">
@@ -42,16 +38,28 @@
             </div>
           </div>
         </div>
-        <!-- end content section -->
 
-        <!-- category section -->
-        <div class="grid justify-items-stretch mt-4">
+        <!-- Kategori -->
+        <div class="grid justify-items-stretch">
           <ul class="flex space-x-2 px-7 py-2">
+            <!-- All Category -->
             <li
-              v-for="category in displayedCategories"
+              :class="{
+                'bg-blue-200 text-blue-900': selectedCategory === 'All Category',
+                'bg-white text-slate-600': selectedCategory !== 'All Category',
+              }"
+              class="py-1 px-3 rounded-lg shadow cursor-pointer"
+              @click="selectCategory('All Category')"
+            >
+              All Category
+            </li>
+
+            <!-- Maksimal 3 kategori -->
+            <li
+              v-for="category in displayedCategories.slice(0, 3)" 
               :key="category"
               :class="{
-                'bg-pink-200 text-pink-900': selectedCategory === category,
+                'bg-blue-200 text-blue-900': selectedCategory === category,
                 'bg-white text-slate-600': selectedCategory !== category,
               }"
               class="py-1 px-3 rounded-lg shadow cursor-pointer"
@@ -59,6 +67,8 @@
             >
               {{ category }}
             </li>
+
+            <!-- Dropdown -->
             <li
               class="relative py-1 px-3 bg-white text-slate-600 rounded-lg shadow cursor-pointer"
               @click="toggleDropdown"
@@ -68,8 +78,9 @@
                 v-if="isDropdownVisible"
                 class="absolute left-0 top-full mt-1 bg-white shadow-lg rounded-lg w-max dropdown-menu"
               >
+                <!-- Menampilkan kategori selain yang pertama sampai ke-4 -->
                 <li
-                  v-for="category in dropdownCategories"
+                  v-for="category in displayedCategories.slice(3)" 
                   :key="category"
                   class="py-1 px-3 hover:bg-slate-100 cursor-pointer"
                   @click="selectCategory(category)"
@@ -80,8 +91,10 @@
             </li>
           </ul>
         </div>
+      </div>
 
-        <!-- Cake Menu -->
+      <!-- Kontainer Produk yang Bisa Discroll -->
+      <div class="flex-1 overflow-y-auto bg-white pb-20">
         <div class="grid grid-cols-2 gap-4 p-4">
           <div
             class="bg-white rounded-lg shadow-xl overflow-hidden cursor-pointer"
@@ -98,48 +111,44 @@
               <h3 class="text-lg font-bold">{{ item.title }}</h3>
               <p class="text-gray-600 mt-2">{{ item.category }}</p>
               <p class="text-gray-800 mt-2">{{ item.price }}</p>
-
             </div>
           </div>
         </div>
-        <!-- end Cake Menu -->
+      </div>
 
-        <!-- CakeDetailPopup -->
-        <CakeDetailPopup
-          v-if="isPopupVisible"
-          :cakeItem="selectedCakeItem"
-          @close="closePopupDetail"
-        />
-        <!-- end CakeDetailPopup -->
+      <!-- Cake Detail Popup -->
+      <CakeDetailPopup
+        v-if="isPopupVisible"
+        :cakeItem="selectedCakeItem"
+        @close="closePopupDetail"
+      />
 
-        <!-- Navbar button -->
-        <div
-          class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50 bg-pink-300"
-        >
-          <div class="flex justify-center py-2">
-            <ul class="flex space-x-20 font-semibold">
-              <router-link
+      <!-- Navbar Bottom -->
+      <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50 bg-blue-300">
+        <div class="flex justify-center py-2">
+          <ul class="flex space-x-20 font-semibold">
+            <router-link
               :to="{ name: 'Produk', params: { slug: $route.params.slug } }"
               exact
-              class="nav-link py-2 px-8 bg-white text-pink-900 rounded-md shadow text-semibold"
+              class="nav-link py-2 px-8 bg-white text-blue-900 rounded-md shadow text-semibold"
             >
               Produk
             </router-link>
             <router-link
               :to="{ name: 'Linkyi', params: { slug: $route.params.slug } }"
               exact
-              class="nav-link py-2 px-8 bg-white text-pink-900 rounded-md shadow text-semibold"
+              class="nav-link py-2 px-8 bg-white text-blue-900 rounded-md shadow text-semibold"
             >
               Linkyi
             </router-link>
-            </ul>
-          </div>
+          </ul>
         </div>
-        <!-- end Navbar button -->
       </div>
+
     </div>
   </div>
 </template>
+
 
 <script>
 import { useDataStore } from "../../../stores/dataStore";
@@ -155,7 +164,7 @@ export default {
   data() {
     return {
       searchQuery: "",
-      selectedCategory: "All Cake",
+      selectedCategory: "All Category",
       isDropdownVisible: false,
       isPopupVisible: false,
       selectedCakeItem: null,
@@ -184,10 +193,10 @@ export default {
       return this.store ? this.store.storeName : "";
     },
     filteredItems() {
-      return this.cakeItems.filter(item => {
-        const matchesSearchQuery = item.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-        const matchesCategory = this.selectedCategory === "All Cake" || item.category === this.selectedCategory;
-        return matchesSearchQuery && matchesCategory;
+    return this.cakeItems.filter(item => {
+      const matchesSearchQuery = item.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+      const matchesCategory = this.selectedCategory === "All Category" || item.category === this.selectedCategory;
+      return matchesSearchQuery && matchesCategory;
       });
     },
   },
@@ -202,6 +211,11 @@ export default {
     },
     filterItems() {
       // The filtering is handled in the computed property 'filteredItems'
+        this.filteredItems = this.cakeItems.filter(item => {
+        const matchesSearchQuery = item.title.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const matchesCategory = this.selectedCategory === "All Category" || item.category === this.selectedCategory;
+        return matchesSearchQuery && matchesCategory;
+      });
     },
     async showPopup(item) {
       this.selectedCakeItem = await this.productDetail(item.id);
@@ -285,7 +299,7 @@ export default {
 }
 
 .router-link-active {
-  background-color: #f55ff5;
+  background-color: #3b82f6;
   color: white;
 }
 
@@ -294,7 +308,7 @@ export default {
 }
 
 .nav-link:hover {
-  background-color: #f55ff5;
+  background-color: #3b82f6;
   color: white;
 }
 </style>

@@ -34,7 +34,7 @@
     <a
       :href="link.link"
       target="_blank"
-      class="bg-pink-400 text-white py-2 px-5 mt-10 mb-5 rounded-lg font-semibold mb-4"
+      class="bg-blue-400 text-white py-2 px-5 mt-10 mb-5 rounded-lg font-semibold mb-4"
     >
       {{ link.type }}
     </a>

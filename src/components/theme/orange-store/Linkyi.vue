@@ -3,7 +3,7 @@
     <div class="mx-auto min-h-full max-w-md">
       <div class="min-h-screen bg-white" style="padding-bottom: 4rem;">
         <div class="py-10 items-center text-center">
-          <img :src="storeLogo" alt="Store Logo" class="h-h-20 w-20 mx-auto mt-3" />
+          <img :src="storeLogo" alt="Store Logo" class="h-h-20 w-20 mx-auto mt-3 rounded-full" />
           <h2 class="text-xl font-bold mt-3">{{ storeName }}</h2>
           <!-- <img src="../../../assets/cake.svg" alt="logo" class="h-20 w-20 mx-auto mt-3"> -->
           <!-- <h2 class="text-xl font-bold mt-3">Cake Shop</h2> -->
@@ -29,27 +29,27 @@
         </div> -->
         <div class="px-20">
           <ul class="rounded-lg text-center text-semibold space-y-4 text-white">
-            <li v-for="link in storeLinks" :key="link.name" class="bg-gradient-to-r from-pink-200 to-pink-500 py-3 rounded-md font-semibold">
+            <li v-for="link in storeLinks" :key="link.name" class="bg-gradient-to-r from-blue-200 to-blue-500 py-3 rounded-md font-semibold">
               <a :href="link.link" target="_blank">{{ link.name }}</a>
             </li>
           </ul>
         </div>
 
       <!-- button dibawah pokoknya -->
-      <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50 bg-pink-300">
+      <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50 bg-blue-300">
         <div class="flex justify-center py-2">
             <ul class="flex space-x-20 font-semibold">
               <router-link
               :to="{ name: 'Produk', params: { slug: $route.params.slug } }"
               exact
-              class="nav-link py-2 px-8 bg-white text-pink-900 rounded-md shadow text-semibold"
+              class="nav-link py-2 px-8 bg-white text-blue-900 rounded-md shadow text-semibold"
             >
               Produk
             </router-link>
             <router-link
               :to="{ name: 'Linkyi', params: { slug: $route.params.slug } }"
               exact
-              class="nav-link py-2 px-8 bg-white text-pink-900 rounded-md shadow text-semibold"
+              class="nav-link py-2 px-8 bg-white text-blue-900 rounded-md shadow text-semibold"
             >
               Linkyi
             </router-link>
@@ -121,7 +121,7 @@ export default {
 }
 
 .router-link-active {
-    background-color: #f55ff5; 
+    background-color: #3b82f6; 
     color: white; 
   }
   
@@ -130,7 +130,7 @@ export default {
   }
   
   .nav-link:hover {
-    background-color: #f55ff5; 
+    background-color: #3b82f6; 
     color: white; 
   }
 </style>
