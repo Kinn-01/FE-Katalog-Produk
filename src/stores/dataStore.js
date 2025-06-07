@@ -29,7 +29,7 @@ export const useDataStore = defineStore("dataStore", {
           throw new Error("Slug is required");
         }
         const response = await axios.get(
-          `https://api.linkyi.shop/api/store/${slug}`
+          `https://api.linkyi.site/api/store/${slug}`
         );
         const { store, theme, links, categories } = response.data.data;
         this.storeName = store.name;
@@ -62,7 +62,7 @@ export const useDataStore = defineStore("dataStore", {
 
         while (hasMorePages) {
           const response = await axios.get(
-            `https://api.linkyi.shop/api/store/${slug}/products?page=${currentPage}`
+            `https://api.linkyi.site/api/store/${slug}/products?page=${currentPage}`
           );
           const products = response.data.data.products.data;
           if (products && products.length > 0) {
@@ -101,7 +101,7 @@ export const useDataStore = defineStore("dataStore", {
       }
       try {
         const response = await axios.get(
-          `https://api.linkyi.shop/api/store/${slug}/products/${productId}`
+          `https://api.linkyi.site/api/store/${slug}/products/${productId}`
         );
         const productDetail = response.data.data;
         this.selectedCakeItem = {
