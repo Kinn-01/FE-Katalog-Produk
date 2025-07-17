@@ -10,8 +10,8 @@
 
           <!-- sosial media -->
           <div class="flex justify-center space-x-2 mt-2">
-            <img src="../../../assets/facbook.svg" alt="facebook" class="h-10 w-10">
-            <img src="../../../assets/twitter.svg" alt="twitter" class="h-10 w-9">
+            <img src="../../../assets/shopee.svg" alt="shopee" class="h-10 w-10">
+            <img src="../../../assets/tokopedia.svg" alt="tokopedia" class="h-10 w-9">
             <img src="../../../assets/whats.svg" alt="whatsapp" class="h-10 w-9.5">
             <img src="../../../assets/instagram1.svg" alt="instagram" class="h-10 w-10.5">
           </div>

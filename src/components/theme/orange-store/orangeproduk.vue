@@ -68,7 +68,7 @@
               {{ category }}
             </li>
 
-            <!-- Dropdown -->
+            <!-- Dropdown Container -->
             <li
               class="relative py-1 px-3 bg-white text-slate-600 rounded-lg shadow cursor-pointer"
               @click="toggleDropdown"
@@ -76,9 +76,8 @@
               ▼
               <ul
                 v-if="isDropdownVisible"
-                class="absolute left-0 top-full mt-1 bg-white shadow-lg rounded-lg w-max dropdown-menu"
+                class="absolute right-0 top-full mt-1 bg-white shadow-lg rounded-lg w-48 z-50"
               >
-                <!-- Menampilkan kategori selain yang pertama sampai ke-4 -->
                 <li
                   v-for="category in displayedCategories.slice(3)" 
                   :key="category"
